@@ -1,9 +1,15 @@
-from flask import Flask
-from flask_restful import Api, Resource, reqparse
+from flask import Blueprint
+from flask_restful import Api
+from resources.Hello import Hello
+from resources.Messages import MessageResource
+from resources.Messages import CountMessages
 
-app = Flask(__name__)
-api = Api(app)
+api_bp = Blueprint('api', __name__)
+api = Api(api_bp)
 
 
-if __name__ == '__main__':
-    app.run()
+
+# Route
+api.add_resource(Hello, '/Hello')
+api.add_resource(MessageResource, '/Messages')
+api.add_resource(CountMessages, '/userMessageCount')
