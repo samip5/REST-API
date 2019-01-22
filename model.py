@@ -2,6 +2,7 @@ from flask import Flask
 from marshmallow import Schema, fields, pre_load, validate
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import relationship
 import config
 
 
@@ -13,7 +14,7 @@ class Messages(db.Model):
     __tablename__ = 'discord_messages'
     discord_message_id = db.Column(db.Integer, primary_key=True)
     server_id = db.Column(db.BigInteger, nullable=False)
-    channel_id = db.Column(db.BigInteger, nullable=False)
+    channel_id = db.Column(db.Integer, db.ForeignKey('discord_channels.channel_id'), unique=True, nullable=False)
     message_id = db.Column(db.BigInteger, nullable=False)
     message_date = db.Column(db.TIMESTAMP(3), server_default=db.func.current_timestamp(), nullable=False)
     person_name = db.Column(db.VARCHAR, nullable=False)
@@ -29,6 +30,16 @@ class Messages(db.Model):
         self.person_name = person_name
         self.message_text = message_text
         self.user_id = user_id
+
+
+class Channels(db.Model):
+    __tablename__ = 'discord_channels'
+    channel_id = db.Column(db.BigInteger, primary_key=True, nullable=False)
+    channel_name = db.Column(db.VARCHAR, nullable=False)
+
+    def __init__(self, channel_id, channel_name):
+        self.channel_id = channel_id
+        self.channel_name = channel_name
 
 
 class Profile(db.Model):
@@ -64,4 +75,9 @@ class MessagesSchema(ma.Schema):
     person_name = fields.Field()
     message_text = fields.Field()
     user_id = fields.Integer()
+
+
+class ChannelsSchema(ma.Schema):
+    channel_id = fields.Integer()
+    channel_name = fields.String()
 
