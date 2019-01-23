@@ -5,6 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 import config
 
+from passlib.apps import custom_app_context as pwd_context
+
 
 ma = Marshmallow()
 db = SQLAlchemy()
@@ -12,7 +14,7 @@ db = SQLAlchemy()
 
 class Messages(db.Model):
     __tablename__ = 'discord_messages'
-    discord_message_id = db.Column(db.Integer, primary_key=True)
+    discord_message_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     server_id = db.Column(db.BigInteger, nullable=False)
     channel_id = db.Column(db.Integer, db.ForeignKey('discord_channels.channel_id'), unique=True, nullable=False)
     message_id = db.Column(db.BigInteger, nullable=False)
@@ -21,8 +23,7 @@ class Messages(db.Model):
     message_text = db.Column(db.VARCHAR(2000), nullable=True)
     user_id = db.Column(db.BigInteger, nullable=False)
 
-    def __init__(self, discord_messages_id, server_id, channel_id, message_id, message_date, person_name, message_text, user_id):
-        self.discord_messages_id = discord_messages_id
+    def __init__(self, server_id, channel_id, message_id, message_date, person_name, message_text, user_id):
         self.server_id = server_id
         self.channel_id = channel_id
         self.message_id = message_id
@@ -81,3 +82,8 @@ class ChannelsSchema(ma.Schema):
     channel_id = fields.Integer()
     channel_name = fields.String()
 
+
+class ProfileSchema(ma.Schema):
+    uid = fields.Integer()
+    UserID = fields.String()
+    Roles = fields.Field()

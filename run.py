@@ -8,7 +8,7 @@ def create_app(config_filename):
     from app import api_bp
     app.register_blueprint(api_bp, url_prefix='/api')
 
-    from model import db
+    from models import db
     db.init_app(app)
 
     return app
@@ -16,4 +16,4 @@ def create_app(config_filename):
 
 if __name__ == "__main__":
     app = create_app("config")
-    app.run(debug=True)
+    app.run(host='192.168.2.176',debug=True)
