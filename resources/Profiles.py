@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from models import db, Profile, ProfileSchema
+from models import db, Profile
 
 
 class ProfilesResource(Resource):
