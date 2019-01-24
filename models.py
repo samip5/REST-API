@@ -1,12 +1,6 @@
-from flask import Flask
-from marshmallow import Schema, fields, pre_load, validate
+from marshmallow import fields
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import relationship
-import config
-
-from passlib.apps import custom_app_context as pwd_context
-
 
 ma = Marshmallow()
 db = SQLAlchemy()

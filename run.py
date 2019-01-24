@@ -13,7 +13,8 @@ def create_app(config_filename):
 
     return app
 
+app = create_app("config")
 
 if __name__ == "__main__":
-    app = create_app("config")
-    app.run(host='192.168.2.176',debug=True)
+    #app = create_app("config")
+    app.run(host='0.0.0.0')
