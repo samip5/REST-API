@@ -1,5 +1,5 @@
 from flask import request
-from flask_restful import Resource
+from flask_restplus import Resource
 from models import db, Messages, MessagesSchema, Channels, ChannelsSchema
 from sqlalchemy import func
 
@@ -10,6 +10,7 @@ channel_schema = ChannelsSchema()
 
 
 class MessageResource(Resource):
+    """Hello there"""
     def get(self):
         """Request type is GET."""
         value = request.args.get('user_id')

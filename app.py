@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask_restful import Api
+from flask_restplus import Api
 from resources.Hello import Hello
 from resources.Messages import MessageResource
 from resources.Messages import CountMessages
@@ -8,8 +8,7 @@ from resources.Profiles import ProfilesResource
 from resources.Users import UsersResource
 
 api_bp = Blueprint('api', __name__)
-api = Api(api_bp)
-
+api = Api(api_bp, version='1.0')
 
 
 # Routes

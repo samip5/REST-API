@@ -2,6 +2,8 @@
 # not particularly care what OS runs underneath
 FROM python:3.7
 
+LABEL mainainer="sm+docker@samip.fi"
+
 # Set an environment variable with the directory
 # where we'll be running the app
 ENV APP /app
@@ -12,7 +14,7 @@ RUN mkdir $APP
 WORKDIR $APP
 
 # Expose the port uWSGI will listen on
-EXPOSE 5000
+EXPOSE 80
 
 # Copy the requirements file in order to install
 # Python dependencies
@@ -26,4 +28,4 @@ COPY . .
 
 # Finally, we run uWSGI with the ini file we
 # created earlier
-CMD [ "uwsgi", "--ini", "configs/app.ini" ]
+CMD [ "uwsgi", "--ini", "configs/app.ini", "--enable-threads"]

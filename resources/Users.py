@@ -1,5 +1,5 @@
 from flask import request
-from flask_restful import Resource
+from flask_restplus import Resource
 from models import db, Discord_Users
 from flask import jsonify
 
