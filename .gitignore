@@ -1,4 +1,2 @@
-# Files to exclude from git
 config.py
 .idea/*
-migrations/*
