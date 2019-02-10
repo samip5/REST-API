@@ -7,11 +7,12 @@ LABEL mainainer="sm+docker@samip.fi"
 # Set an environment variable with the directory
 # where we'll be running the app
 ENV APP /app
+ENV MAIN /main
 
 # Create the directory and instruct Docker to operate
 # from there from now on
-RUN mkdir $APP
-WORKDIR $APP
+RUN mkdir -p $MAIN/$APP
+WORKDIR $MAIN
 
 # Expose the port uWSGI will listen on
 EXPOSE 80
