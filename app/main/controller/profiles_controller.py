@@ -1,6 +1,7 @@
 from flask import request
-from flask_restplus import Resource
+from flask_restplus import Resource, reqparse
 
+from app.main.util.decorator import admin_token_required, bot_token_required
 from ..util.dto import ProfilesDto
 from ..service.profiles_service import get_profile, get_count_by_city, get_cities, get_etunimi, get_sukunimi, \
     get_email, get_birthday_if_consent, get_birthday_bypass_perms, update_permissions, \
@@ -12,11 +13,16 @@ _profile = ProfilesDto.profile
 _parrot = ProfilesDto.parrot
 _profile_update = ProfilesDto.publicity_update_profile
 
+parser = reqparse.RequestParser()
+parser.add_argument('Authorization', required=True, type=str, help='Token')
+
 
 @api.route('/')
 class Profile(Resource):
     @api.doc(responses={200: 'Accepted', 204: 'No Content'})
     @api.param('user_id', 'The user identifier')
+    @api.expect(parser)
+    @admin_token_required
     def get(self):
         """Returns users profile"""
         user_id = request.args.get('user_id')
@@ -26,6 +32,8 @@ class Profile(Resource):
 
 @api.route('/countByCity')
 class ProfilecountByCity(Resource):
+    @api.expect(parser)
+    @bot_token_required
     def get(self):
         """Returns count by city from user profiles"""
         return get_count_by_city()
@@ -33,6 +41,8 @@ class ProfilecountByCity(Resource):
 
 @api.route('/getCities')
 class ProfileGetCities(Resource):
+    @api.expect(parser)
+    @bot_token_required
     def get(self):
         """List of cities"""
         return get_cities()
@@ -42,6 +52,8 @@ class ProfileGetCities(Resource):
 class ProfileGetEtunimi(Resource):
     @api.doc("Get user's first name", responses={200: 'Success', 419: 'Not allowed by user'})
     @api.param('user_id', 'The user identifier')
+    @api.expect(parser)
+    @bot_token_required
     def get(self):
         """Returns user's first name if allowed"""
         user_id = request.args.get('user_id')
@@ -52,6 +64,8 @@ class ProfileGetEtunimi(Resource):
 class ProfileGetSukunimi(Resource):
     @api.doc("Get user's last name", responses={200: 'Success', 419: 'Not allowed by user'})
     @api.param('user_id', 'The user identifier')
+    @api.expect(parser)
+    @bot_token_required
     def get(self):
         """Returns user's last name if allowed"""
         user_id = request.args.get('user_id')
@@ -62,6 +76,8 @@ class ProfileGetSukunimi(Resource):
 class ProfileGetEmail(Resource):
     @api.doc("Get user's email address", responses={200: 'Success', 419: 'Not allowed by user'})
     @api.param('user_id', 'The user identifier')
+    @api.expect(parser)
+    @bot_token_required
     def get(self):
         """Returns the email address of a user if allowed"""
         user_id = request.args.get('user_id')
@@ -72,6 +88,8 @@ class ProfileGetEmail(Resource):
 class ProfileGetBirthday(Resource):
     @api.doc("", responses={200: 'Success', 419: 'Not allowed by user'})
     @api.param('user_id', 'The user identifier')
+    @api.expect(parser)
+    @bot_token_required
     def get(self):
         """Returns user's birthday if consent is given"""
         user_id = request.args.get('user_id')
@@ -82,6 +100,8 @@ class ProfileGetBirthday(Resource):
 class ProfileGetBirthdayBypass(Resource):
     @api.doc("", responses={200: 'Success', 204: 'No content'})
     @api.param('user_id', 'The user identifier')
+    @api.expect(parser)
+    @bot_token_required
     def get(self):
         """Returns user's birthday without checking permissions nor consent"""
         user_id = request.args.get('user_id')
@@ -91,6 +111,8 @@ class ProfileGetBirthdayBypass(Resource):
 @api.route('/getParrots')
 class ProfileGetParrots(Resource):
     @api.param('user_id', 'The user identifier')
+    @api.expect(parser)
+    @bot_token_required
     def get(self):
         """Returns user's parrots."""
         user_id = request.args.get('user_id')
@@ -103,6 +125,8 @@ class ProfilePostUpdatePaikkakunta(Resource):
     @api.param('permission_id', 'The setting ID')
     @api.param('user_id', 'The user identfier')
     @api.param('settings_value', 'The setting value to set to')
+    @api.expect(parser)
+    @bot_token_required
     def post(self):
         """Updates users city."""
         permission_id = request.args.get('id')
@@ -113,7 +137,8 @@ class ProfilePostUpdatePaikkakunta(Resource):
 
 @api.route('/updatePublicityPerms')
 class ProfilePostUpdatePerms(Resource):
-    @api.expect(_profile_update, validate=True)
+    @api.expect(_profile_update, parser, validate=True)
+    @bot_token_required
     def post(self):
         """Updates specific profile publicity setting"""
         user_id = request.args.get('user_id')
@@ -128,6 +153,8 @@ class ProfilePostUpdatePerms(Resource):
 class ProfileUpdateLastname(Resource):
     @api.param('user_id', 'The user identfier')
     @api.param('lastname', "The users lastname")
+    @api.expect(parser)
+    @bot_token_required
     def post(self):
         """Insert's users last name to their profile"""
         user_id = request.args.get('user_id')
@@ -140,6 +167,8 @@ class ProfileSetPaikkakunta(Resource):
     @api.param('id', 'The setting ID')
     @api.param('user_id', 'The user identfier')
     @api.param('settings_value', 'The setting value to set to')
+    @api.expect(parser)
+    @bot_token_required
     def post(self):
         """Insert's users city to their profile"""
         permission_id = request.args.get('id')
@@ -152,6 +181,8 @@ class ProfileSetPaikkakunta(Resource):
 class ProfileSetEtunimi(Resource):
     @api.param('user_id', 'The user identfier')
     @api.param('firstname', "The users firstname")
+    @api.expect(parser)
+    @bot_token_required
     def post(self):
         """Insert's users first name to their profile"""
         user_id = request.args.get('user_id')
@@ -159,10 +190,23 @@ class ProfileSetEtunimi(Resource):
         return post_new_etunimi(user_id, firstname=firstname)
 
 
+@api.route('/setSukunimi')
+class ProfilesSetSukunim(Resource):
+    @api.param('user_id', 'The user identfier')
+    @api.param('lastname', "The users lastname")
+    @api.expect(parser)
+    @bot_token_required
+    def post(self):
+        """Insert's users first name to their profile"""
+        user_id = request.args.get('user_id')
+        lastname = request.args.get('lastname')
+        return post_new_sukunimi(user_id, lastname)
+
+
 @api.route('/postNewParrot')
 class ProfileInsertNewParrot(Resource):
     @api.marshal_list_with(_parrot)
-    @api.expect(_parrot)
+    @api.expect(_parrot, parser, validate=True)
     def post(self):
         """Inserts a new parrot to the database"""
         user_id = request.json.get('user_id')

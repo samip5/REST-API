@@ -71,6 +71,7 @@ class Auth:
                         'user_id': user.id,
                         'email': user.email,
                         'admin': user.admin,
+                        'bot': user.bot,
                         'registered_on': str(user.registered_on)
                     }
                 }

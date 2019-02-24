@@ -9,10 +9,21 @@ from .main.controller.messages_controller import api as messages_ns
 
 blueprint = Blueprint('api', __name__)
 
+authorizations = {
+    'token': {
+        'type': 'apiKey',
+        'in': 'header',
+        'name': 'Authorization'
+    }
+}
+
+
 api = Api(blueprint,
           title='Messis API',
           version='1.1',
-          doc='/doc/'
+          doc='/doc/',
+          authorizations=authorizations,
+          security='token'
           )
 
 api.add_namespace(api_user_ns, path='/api_user')

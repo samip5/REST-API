@@ -16,7 +16,7 @@ def save_new_user(data):
             registered_on=datetime.datetime.utcnow()
         )
         save_changes(new_user)
-        return generate_token(new_user), 201
+        return generate_token(new_user)
     else:
         response_object = {
             'status': 'fail',
