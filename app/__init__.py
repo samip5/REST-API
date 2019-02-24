@@ -11,7 +11,8 @@ blueprint = Blueprint('api', __name__)
 
 api = Api(blueprint,
           title='Messis API',
-          version='1.0'
+          version='1.1',
+          doc='/doc/'
           )
 
 api.add_namespace(api_user_ns, path='/api_user')

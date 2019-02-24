@@ -1,7 +1,7 @@
 from app.main import db
 
 
-class Discord_Users(db.Model):
+class DiscordUsersModel(db.Model):
     __tablename__ = 'discord_users'
     uid = db.Column(db.Integer, nullable=False, autoincrement=True)
     user_id = db.Column(db.BigInteger, nullable=False, primary_key=True)

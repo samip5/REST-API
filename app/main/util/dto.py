@@ -6,8 +6,7 @@ class ApiUserDto:
     user = api.model('api_users', {
         'email': fields.String(required=True, description='user email address'),
         'username': fields.String(required=True, description='user username'),
-        'password': fields.String(required=True, description='user password'),
-        'public_id': fields.String(description='user Identifier')
+        'password': fields.String(required=True, description='user password')
     })
 
 
@@ -27,8 +26,26 @@ class ProfilesDto:
     api = Namespace('profiles', description='Profiles related operations')
     profile = api.model('profiles', {
         'userid': fields.Integer(required=True, description='User Discord ID'),
+        'permissionsid': fields.Integer(required=True, description='The permissions ID'),
         'settingsid': fields.String(required=True, description='Settings ID of the profile'),
-        'settingsvalue': fields.String(required=False, description='Settings value')
+        'settingsvalue': fields.String(required=False, description='Settings value'),
+        'permissionsvalue': fields.Integer(required=True, description='Integer value of the desired permission')
+    })
+    parrot = api.model('parrot', {
+        'user_id': fields.String(required=True, description='User Discord ID'),
+        'message_id': fields.String(required=True, description='Message ID from Discord'),
+        'message_date': fields.DateTime(required=True, description='The UTC datetime when the message was posted '
+                                                                   'from Discord'),
+        'person_name': fields.String(required=True, description="User's display_name from Discord"),
+        'message_text': fields.String(required=True, description='Message content itself'),
+        'message_url': fields.String(required=True, description='The jump URL'),
+        'channel_id': fields.String(required=True, description='The channel ID where the message was posted')
+    })
+    publicity_update_profile = api.model('publicity_update', {
+        'userid': fields.Integer(required=True, description='User Discord ID'),
+        'perm_id': fields.Integer(required=True, description='The permissions ID'),
+        'settings_id': fields.Integer(required=True, description='The settings ID'),
+        'perm_value': fields.Integer(required=True, description='Integer value of the desired permission')
     })
 
 
