@@ -1,4 +1,4 @@
-from app.main.model.discord_users import Discord_Users
+from app.main.model.discord_users import DiscordUsersModel as Discord_Users
 from app.main import db
 from flask import jsonify
 
