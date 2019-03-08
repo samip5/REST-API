@@ -2,28 +2,25 @@ from .. import db
 import datetime
 
 
-class BlacklistToken(db.Model):
+class TokenBlacklist(db.Model):
     """
     Token Model for storing JWT tokens
     """
     __tablename__ = 'blacklist_tokens'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    token = db.Column(db.String(500), unique=True, nullable=False)
-    blacklisted_on = db.Column(db.DateTime, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    jti = db.Column(db.String(36), nullable=False)
+    token_type = db.Column(db.String(10), nullable=False)
+    user_identity = db.Column(db.String(50), nullable=False)
+    revoked = db.Column(db.Boolean, nullable=False)
+    expires = db.Column(db.DateTime, nullable=False)
 
-    def __init__(self, token):
-        self.token = token
-        self.blacklisted_on = datetime.datetime.now()
-
-    def __repr__(self):
-        return '<id: token: {}'.format(self.token)
-
-    @staticmethod
-    def check_blacklist(auth_token):
-        # check whether auth token has been blacklisted
-        res = BlacklistToken.query.filter_by(token=str(auth_token)).first()
-        if res:
-            return True
-        else:
-            return False
+    def to_dict(self):
+        return {
+            'token_id': self.id,
+            'jti': self.jti,
+            'token_type': self.token_type,
+            'user_identity': self.user_identity,
+            'revoked': self.revoked,
+            'expires': self.expires
+        }
