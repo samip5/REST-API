@@ -4,7 +4,6 @@ from flask_restplus import Namespace, fields
 class ApiUserDto:
     api = Namespace('api_user', description='api user related operations')
     user = api.model('api_users', {
-        'email': fields.String(required=True, description='user email address'),
         'username': fields.String(required=True, description='user username'),
         'password': fields.String(required=True, description='user password')
     })
@@ -74,6 +73,6 @@ class UsersDto:
 class AuthDto:
     api = Namespace('auth', description='authentication related operations')
     user_auth = api.model('auth_details', {
-        'email': fields.String(required=True, description='The email address'),
+        'username': fields.String(required=True, description='The username'),
         'password': fields.String(required=True, description='The user password '),
     })

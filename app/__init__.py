@@ -29,5 +29,5 @@ api = Api(blueprint,
 api.add_namespace(api_user_ns, path='/api_user')
 api.add_namespace(testing_ns, path='/Hello')
 api.add_namespace(profiles_ns, path='/profiles')
-api.add_namespace(auth_ns)
+api.add_namespace(auth_ns, path='/auth')
 api.add_namespace(messages_ns, path='/messages')

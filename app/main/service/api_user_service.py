@@ -3,10 +3,11 @@ import datetime
 
 from app.main import db
 from app.main.model.api_users import User
+from flask_jwt_extended import create_access_token, create_refresh_token
 
 
 def save_new_user(data):
-    user = User.query.filter_by(email=data['email']).first()
+    user = User.query.filter_by(email=data['username']).first()
     if not user:
         new_user = User(
             public_id=str(uuid.uuid4()),
@@ -26,13 +27,15 @@ def save_new_user(data):
 
 
 def generate_token(user):
+    access_token = create_access_token(identity=user.username)
+    refresh_token = create_refresh_token(identity=user.username, expires_delta=datetime.timedelta(days=30))
+
     try:
-        # generate the auth token
-        auth_token = user.encode_auth_token(user.id)
         response_object = {
             'status': 'success',
             'message': 'Successfully registered.',
-            'Authorization': auth_token.decode()
+            'access-token': access_token,
+            'refresh-token': refresh_token
         }
         return response_object, 201
     except Exception as e:
