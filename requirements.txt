@@ -9,6 +9,7 @@ Flask-Migrate
 flask-restplus
 flask_marshmallow
 Flask-Script
+flask_jwt_extended
 marshmallow-sqlalchemy
 Flask-SQLAlchemy
 Flask-Testing

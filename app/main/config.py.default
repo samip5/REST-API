@@ -1,0 +1,29 @@
+import logging
+
+
+class Config:
+    DEBUG = False
+    RELOAD = False
+
+    LOG_FILE = 'rest-api.log'
+    LOG_LEVEL = logging.INFO
+    LOG_FORMAT = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+
+
+class DevelopmentConfig(Config):
+    DEBUG = True
+    LOG_LEVEL = logging.DEBUG
+
+    SQLALCHEMY_DATABASE_URI = 'postgresql://dev:dev@localhost/messis_database'
+
+
+class ProductionConfig(Config):
+    pass
+
+
+config_by_name = {
+    'dev': DevelopmentConfig,
+    'prod': ProductionConfig
+}
